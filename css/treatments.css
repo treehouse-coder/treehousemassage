@@ -1,0 +1,563 @@
+/*======================================
+TREATMENTS
+=======================================*/
+
+.treatments{
+
+    background:#ffffff;
+
+}
+
+.treatment-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+
+    gap:35px;
+
+    margin-top:60px;
+
+}
+
+.treatment-card{
+
+    background:#fff;
+
+    border-radius:25px;
+
+    overflow:hidden;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.08);
+
+    transition:.45s;
+
+    position:relative;
+
+}
+
+.treatment-card:hover{
+
+    transform:translateY(-12px);
+
+    box-shadow:0 25px 50px rgba(0,0,0,.15);
+
+}
+
+.treatment-card img{
+
+    width:100%;
+
+    height:260px;
+
+    object-fit:cover;
+
+    transition:.6s;
+
+}
+
+.treatment-card:hover img{
+
+    transform:scale(1.08);
+
+}
+
+.treatment-content{
+
+    padding:30px;
+
+}
+
+.duration{
+
+    display:inline-block;
+
+    background:#eef5ea;
+
+    color:var(--green);
+
+    padding:8px 18px;
+
+    border-radius:30px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+.treatment-content h3{
+
+    margin:20px 0 15px;
+
+    color:var(--green);
+
+    font-size:28px;
+
+}
+
+.treatment-content p{
+
+    color:#666;
+
+    margin-bottom:25px;
+
+}
+
+.price{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.price strong{
+
+    color:var(--gold);
+
+    font-size:24px;
+
+}
+
+.btn-small{
+
+    padding:12px 25px;
+
+    border-radius:30px;
+
+}
+
+/*======================================
+PRICE LIST
+=======================================*/
+
+.price-mobile{
+
+    display:none !important;
+
+}
+
+.price-list {
+
+    background:#F8F6F2;
+    padding:90px 0;
+
+}
+
+
+/* PRICE GRID */
+
+.price-grid {
+
+    display:grid;
+
+    grid-template-columns:repeat(2, 1fr);
+
+    gap:30px;
+
+    margin-top:50px;
+
+}
+
+
+
+/* PRICE CARD */
+
+.price-card {
+
+    background:#ffffff;
+
+    padding:35px 30px;
+
+    border-radius:25px;
+
+    text-align:center;
+
+    box-shadow:0 15px 35px rgba(0,0,0,0.08);
+
+    position:relative;
+
+    transition:.3s ease;
+
+    overflow:hidden;
+
+}
+
+.price-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.price-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:45%;
+
+    left:50%;
+
+    width:300px;
+
+    height:300px;
+
+    transform:translate(-50%, -50%);
+
+    background:url("../images/logo/logo.png") center center / contain no-repeat;
+
+    opacity:.10;
+
+    pointer-events:none;
+
+    z-index:0;
+
+}
+
+
+
+.price-card:hover {
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 45px rgba(0,0,0,0.12);
+
+}
+
+
+
+/* TITLE */
+
+.price-card h3 {
+
+    font-family:'Playfair Display', serif;
+
+    font-size:26px;
+
+    color:var(--green);
+
+    margin-bottom:30px;
+
+    position:relative;
+
+}
+
+
+
+.price-card h3::after {
+
+    content:"";
+
+    width:50px;
+
+    height:2px;
+
+    background:var(--green);
+
+    position:absolute;
+
+    bottom:-12px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+}
+
+
+
+/* LIST */
+
+.price-card ul {
+
+    list-style:none;
+
+    padding:0;
+
+    margin:35px 0;
+
+}
+
+
+
+.price-card li {
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:15px 5px;
+
+    border-bottom:1px solid #eeeeee;
+
+}
+
+
+
+.price-card li:last-child {
+
+    border-bottom:none;
+
+}
+
+
+
+/* DURATION */
+
+.price-card li span {
+
+    font-size:15px;
+
+    color:#555;
+
+}
+
+
+
+/* PRICE */
+
+.price-card li strong {
+
+    font-size:17px;
+
+    color:var(--green);
+
+    font-weight:600;
+
+}
+
+
+
+/* BUTTON */
+
+.btn-small {
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    padding:12px 28px;
+
+    border-radius:50px;
+
+    background:var(--green);
+
+    color:white;
+
+    font-size:14px;
+
+    font-weight:500;
+
+    border:none;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+
+
+.btn-small:hover {
+
+    background:#1f5f45;
+
+    transform:translateY(-2px);
+
+}
+
+
+
+/* ICON */
+
+.btn-small i {
+
+    font-size:16px;
+
+}
+
+
+
+
+
+
+/*======================================
+PROMOTION
+======================================*/
+
+.promotion{
+
+    padding:90px 0;
+
+    background:
+    linear-gradient(
+        rgba(0,0,0,.55),
+        rgba(0,0,0,.55)
+    ),
+    url("images/promo-bg.jpg")
+    center/cover;
+
+}
+
+.promotion-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:30px;
+
+}
+
+.promo-box{
+
+    background:rgba(255,255,255,.10);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.18);
+
+    border-radius:28px;
+
+    padding:45px;
+
+    text-align:center;
+
+    transition:.35s;
+
+}
+
+.promo-box:hover{
+
+    transform:translateY(-8px);
+
+    background:rgba(255,255,255,.15);
+
+}
+
+.promo-badge{
+
+    display:inline-block;
+
+    padding:8px 18px;
+
+    border-radius:30px;
+
+    background:rgba(255, 255, 255, 0.379);
+
+    color:var(--White);
+
+    font-size:14px;
+
+    letter-spacing:2px;
+
+    text-transform:uppercase;
+
+    margin-bottom:22px;
+
+}
+
+.promo-box h2{
+
+    color:#fff;
+
+    font-size:56px;
+
+    line-height:1;
+
+    margin-bottom:15px;
+
+}
+
+.promo-box h4{
+
+    color:#fff;
+
+    font-size:22px;
+
+    font-weight:500;
+
+    margin-bottom:18px;
+
+}
+
+.promo-box p{
+
+    color:#ededed;
+
+    line-height:1.8;
+
+    margin-bottom:35px;
+
+}
+
+.promo-box .btn{
+
+    width:100%;
+
+    justify-content:center;
+
+}
+/*======================================
+CARD ANIMATION
+=======================================*/
+
+.treatment-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:-120%;
+
+    width:60%;
+
+    height:100%;
+
+    background:
+
+    linear-gradient(
+
+        90deg,
+
+        transparent,
+
+        rgba(255,255,255,.35),
+
+        transparent
+
+    );
+
+    transform:skewX(-20deg);
+
+}
+
+.treatment-card:hover::before{
+
+    animation:shine .8s;
+
+}
+
+@keyframes shine{
+
+    100%{
+
+        left:150%;
+
+    }
+
+}

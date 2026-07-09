@@ -1,0 +1,213 @@
+
+/*======================================
+HEADER
+=======================================*/
+
+.header{
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    z-index:999;
+
+    transition:.35s;
+
+    background:rgba(0, 0, 0, 0.174);
+
+    backdrop-filter:blur(12px);
+
+}
+
+.header.sticky{
+    background:rgba(0, 0, 0, 0);
+    backdrop-filter:blur(18px);
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.header.sticky .container{
+    height:75px;
+}
+
+.header.sticky .logo img{
+
+    opacity:0;
+
+    width:0;
+
+    height:0px;
+
+    margin-right:0;
+
+    overflow:hidden;
+}
+
+.header.sticky .logo-text{
+    flex-direction:row;
+    align-items:baseline;
+    gap:6px;
+}
+
+.header.sticky .logo-text h2{
+
+    display:flex;
+    color:var(--gold);
+    text-shadow:0 1px 3px rgb(35, 120, 1);
+    flex-direction:row;
+    gap:6px;
+    align-items:baseline;
+}
+.header.sticky .navbar{
+    text-shadow:0 1px 3px rgb(35, 120, 1);
+}
+
+.header .container{
+    height:90px;
+
+    display:flex;
+    align-items:center;
+
+    position:relative;
+}
+
+.book-dropdown{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+}
+
+
+/*======================================
+LOGO
+=======================================*/
+
+.logo{
+    flex:0 0 240px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    transition:.35s ease;
+}
+
+.logo img{
+
+    width: 100px;
+
+    height:60px;
+
+    object-fit:contain;
+
+    transition:.35s ease;
+
+}
+
+.logo h2{
+    font-family: "Arizonia", cursive;
+    font-size: 1.8rem;
+    font-weight: 400;
+    line-height: 1;
+    color: #ffffff;
+    transition:.35s ease;
+}
+
+
+
+/*======================================
+NAVIGATION
+=======================================*/
+
+.mobile-menu-header{
+    display:none;
+}
+
+.navbar{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+
+    display:flex;
+    gap:35px;
+    align-items:center;
+
+    white-space:nowrap;
+}
+
+.navbar a{
+
+    color:var(--white);
+
+    font-weight:500;
+
+    position:relative;
+
+    transition:.3s;
+
+}
+
+.navbar a:hover{
+
+    color:var(--gold);
+
+}
+
+.navbar a::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    bottom:-8px;
+
+    width:0;
+
+    height:2px;
+
+    background:var(--gold);
+
+    transition:.35s;
+
+}
+
+.navbar a:hover::after{
+
+    width:100%;
+
+}
+
+/*======================================
+BOOK BUTTON
+=======================================*/
+
+.book-btn{
+
+    padding:14px 28px;
+
+}
+
+/* Desktop */
+
+.mobile-menu-footer{
+    display:none;
+}
+
+/*======================================
+MOBILE MENU
+=======================================*/
+
+.menu-toggle{
+
+    display:none;
+
+    font-size:28px;
+
+    cursor:pointer;
+
+    color:var(--green);
+
+}

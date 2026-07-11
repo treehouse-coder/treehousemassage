@@ -929,17 +929,53 @@ TESTIMONIAL
 
 
 /*======================================
-GALLERY
+GALLERY MOBILE
 ======================================*/
+
+.gallery{
+
+    padding:60px 0;
+
+}
 
 .gallery-grid{
 
-    columns:1;
-}
-
-.instagram-grid{
+    display:grid;
 
     grid-template-columns:repeat(2,1fr);
+
+    gap:12px;
+
+}
+
+.gallery-item{
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.gallery-item img{
+
+    width:100%;
+
+    height:180px;
+
+    object-fit:cover;
+
+    display:block;
+
+    transition:.4s;
+
+}
+
+.gallery-item:active img{
+
+    transform:scale(1.05);
+
 }
 /*======================================
 TIKTOK MOBILE

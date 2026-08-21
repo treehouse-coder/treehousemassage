@@ -187,442 +187,687 @@ overlay.remove();
 
 });
 
+
 // ===============================
 // LOYALTY MEMBER
 // ===============================
-const memberAPI = "https://script.google.com/macros/s/AKfycbzxSxvIc9MHqxOCAFwNBWMulz02hn74r1yh-YXP29wOpOuyp6BlrJ3IVhy98ZDvHmM/exec";
 
-const checkButton=document.getElementById("checkMember");
+const memberAPI =
+    "https://script.google.com/macros/s/AKfycbzxSxvIc9MHqxOCAFwNBWMulz02hn74r1yh-YXP29wOpOuyp6BlrJ3IVhy98ZDvHmM/exec";
 
+const checkButton = document.getElementById("checkMember");
 const memberInput = document.getElementById("memberCode");
 
 
-if(checkButton){
+if (checkButton) {
 
-checkButton.addEventListener("click",()=>{
+    checkButton.addEventListener("click", async () => {
 
-const input = document.getElementById("memberCode").value.trim();
+        const input = memberInput
+            ? memberInput.value.trim()
+            : "";
 
-const parts = input.split("/");
-
-if(parts.length !== 2){
-
-    alert("Format : Name / Member Code");
-
-    return;
-
-}
+        const parts = input.split("/");
 
 
-let name = "";
-let code = "";
+        // ===============================
+        // VALIDATION FORMAT
+        // ===============================
+
+        if (parts.length !== 2) {
+
+            alert("Format : Name / Member Code");
+
+            return;
+
+        }
 
 
-parts.forEach(item=>{
-
-    item = item.trim();
-
-
-    // deteksi kode member
-    if(/^TM-?/i.test(item)){
-
-        code = item
-            .toUpperCase();
-
-    }
-    else{
-
-        name = item;
-
-    }
-
-});
+        let name = "";
+        let code = "";
 
 
+        parts.forEach(item => {
 
-if(name==="" || code===""){
-
-    alert("Please enter Name and Member Code");
-
-    return;
-
-}
-
-if(name==="" || code===""){
-
-    alert("Format : Name / Member Code");
-
-    return;
-
-}
-
-const result=document.getElementById("memberResult");
+            item = item.trim();
 
 
+            // ===============================
+            // DETECT MEMBER CODE
+            // ===============================
 
-result.innerHTML = `
+            if (/^TM-?/i.test(item)) {
 
-<div class="member-loading">
+                code = item.toUpperCase();
 
+            }
+            else {
 
-    <div class="loading-logo">
+                name = item;
 
-        <img src="images/logo/logo.png" alt="Treehouse Massage">
+            }
 
-    </div>
-
-
-    <h3>
-
-        Checking Member
-
-    </h3>
+        });
 
 
-    <p>
+        // ===============================
+        // VALIDATION
+        // ===============================
 
-        Preparing your loyalty rewards...
+        if (name === "" || code === "") {
 
-    </p>
+            alert("Please enter Name and Member Code");
 
+            return;
 
-</div>
-
-`;
-
-localStorage.setItem("lastMemberSearch", input);
-
-fetch(
-`${memberAPI}?action=member&name=${encodeURIComponent(name)}&code=${encodeURIComponent(code)}`
-)
-
-.then(response => response.json())
-
-.then(data=>{
+        }
 
 
-    if(!data.success){
+        const result =
+            document.getElementById("memberResult");
 
+
+        if (!result) {
+
+            console.error(
+                "memberResult element not found"
+            );
+
+            return;
+
+        }
+
+
+        // ===============================
+        // LOADING
+        // ===============================
 
         result.innerHTML = `
 
-<div class="member-error">
+            <div class="member-loading">
+
+                <div class="loading-logo">
+
+                    <img
+                        src="images/logo/logo.png"
+                        alt="Treehouse Massage">
+
+                </div>
+
+                <h3>
+                    Checking Member
+                </h3>
+
+                <p>
+                    Preparing your loyalty rewards...
+                </p>
+
+            </div>
+
+        `;
 
 
-    <div class="error-icon">
+        // ===============================
+        // SAVE LAST SEARCH
+        // ===============================
 
-        <i class="fas fa-search"></i>
-
-    </div>
-
-
-    <h3>
-
-        Member Not Found
-
-    </h3>
+        localStorage.setItem(
+            "lastMemberSearch",
+            input
+        );
 
 
-    <p>
+        // ===============================
+        // API URL
+        // ===============================
 
-        We couldn't find your membership information.
-
-        <br>
-
-        Please check your Name / Member Code format.<br>
-
-        or contact us for assistance.
-
-    </p>
+        const url =
+            `${memberAPI}?action=member` +
+            `&name=${encodeURIComponent(name)}` +
+            `&code=${encodeURIComponent(code)}`;
 
 
-</div>
+        try {
 
-`;
+            // ===============================
+            // FETCH API
+            // ===============================
+
+            const response = await fetch(url);
 
 
-        return;
+            if (!response.ok) {
 
-    }
+                throw new Error(
+                    `HTTP ${response.status}`
+                );
 
-    const member = {
+            }
 
-    name: data.name,
 
-    code: data.code,
+            const text =
+                await response.text();
 
-    totalStamp: data.available,
 
-    maxStamp: 10,
+            console.log(
+                "MEMBER API RESPONSE:",
+                text
+            );
 
-    lastVisit: data.lastStampDate,
 
-    lastPayment: data.lastStampAmount
+            let data;
 
-};
 
-const memberBook = document.getElementById("memberBook");
+            try {
 
-if(memberBook){
+                data = JSON.parse(text);
 
-    memberBook.addEventListener("click",()=>{
+            }
+            catch (jsonError) {
 
-        document.getElementById("bookBtn").click();
+                console.error(
+                    "Invalid JSON response:",
+                    text
+                );
+
+                throw new Error(
+                    "Invalid JSON response from API"
+                );
+
+            }
+
+
+            // ===============================
+            // MEMBER NOT FOUND
+            // ===============================
+
+            if (!data.success) {
+
+                result.innerHTML = `
+
+                    <div class="member-error">
+
+                        <div class="error-icon">
+
+                            <i class="fas fa-search"></i>
+
+                        </div>
+
+                        <h3>
+                            Member Not Found
+                        </h3>
+
+                        <p>
+
+                            We couldn't find your
+                            membership information.
+
+                            <br>
+
+                            Please check your
+                            Name / Member Code format.
+
+                            <br>
+
+                            or contact us for assistance.
+
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            // ===============================
+            // MEMBER DATA
+            // ===============================
+
+            const member = {
+
+                name: data.name,
+
+                code: data.code,
+
+                totalStamp:
+        Math.round(Number(data.available)) || 0,
+
+                maxStamp: 10,
+
+                lastVisit:
+                    data.lastStampDate || "-",
+
+                lastPayment:
+                    data.lastStampAmount || "-"
+
+            };
+
+
+            // ===============================
+            // STAMP CALCULATION
+            // ===============================
+
+            const currentStamp =
+                member.totalStamp %
+                member.maxStamp;
+
+
+            const displayStamp =
+                currentStamp === 0 &&
+                member.totalStamp > 0
+
+                    ? member.maxStamp
+
+                    : currentStamp;
+
+
+            const percent =
+                (displayStamp /
+                member.maxStamp) * 100;
+
+
+            const rewardCount =
+                Math.floor(
+                    member.totalStamp /
+                    member.maxStamp
+                );
+
+
+            // ===============================
+            // STAMP HTML
+            // ===============================
+
+            let stars = "";
+
+
+            for (
+                let i = 1;
+                i <= member.maxStamp;
+                i++
+            ) {
+
+                if (i <= displayStamp) {
+
+                    stars += `
+
+                        <div class="stamp active"></div>
+
+                    `;
+
+                }
+                else {
+
+                    stars += `
+
+                        <div class="stamp"></div>
+
+                    `;
+
+                }
+
+            }
+
+
+            // ===============================
+            // MEMBER PROFILE
+            // ===============================
+
+            result.innerHTML = `
+
+                <div class="member-profile">
+
+                    <div class="member-top">
+
+                        <div>
+
+                            <span class="member-badge">
+
+                                Loyalty Member
+
+                            </span>
+
+                            <h3>
+
+                                ${member.name}
+
+                            </h3>
+
+                            <p class="member-code">
+
+                                ${member.code}
+
+                            </p>
+
+                        </div>
+
+
+                        <div class="member-icon">
+
+                            <img
+                                src="images/logo/logo.png"
+                                alt="Treehouse Massage">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="member-section">
+
+                        <h4>
+
+                            Available Stamp
+
+                        </h4>
+
+
+                        <div class="stamp-list">
+
+                            ${stars}
+
+                        </div>
+
+
+                        <div class="stamp-summary">
+
+                            <strong>
+
+                                ${member.totalStamp}
+
+                            </strong>
+
+                            <small>
+
+                                Total Stamps
+
+                            </small>
+
+                        </div>
+
+
+                        <div class="reward-grid">
+
+                            <div class="reward-box">
+
+                                <span>
+
+                                    🎯 Next Reward
+
+                                </span>
+
+                                <strong>
+
+                                    ${displayStamp}
+                                    /
+                                    ${member.maxStamp}
+
+                                </strong>
+
+                            </div>
+
+
+                            <div class="reward-box">
+
+                                <span>
+
+                                    🎁 Rewards Earned
+
+                                </span>
+
+                                <strong>
+
+                                    ${rewardCount}
+
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="member-detail">
+
+
+                        <div class="detail-card">
+
+                            <div class="detail-icon">
+
+                                <i
+                                    class="far fa-calendar-check">
+                                </i>
+
+                            </div>
+
+
+                            <div>
+
+                                <small>
+
+                                    Last Visit
+
+                                </small>
+
+                                <strong>
+
+                                    ${member.lastVisit}
+
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-card">
+
+                            <div class="detail-icon">
+
+                                <i
+                                    class="fas fa-seedling">
+                                </i>
+
+                            </div>
+
+
+                            <div>
+
+                                <small>
+
+                                    Last Stamp
+
+                                </small>
+
+                                <strong>
+
+                                    ${member.lastPayment}
+                                    Stamp
+
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="btn member-book-btn"
+                        id="memberBook">
+
+                        <i class="fab fa-whatsapp"></i>
+
+                        Book Your Next Massage
+
+                    </button>
+
+                </div>
+
+            `;
+
+
+            // ===============================
+            // BOOK BUTTON
+            // ===============================
+
+            const memberBook =
+                document.getElementById(
+                    "memberBook"
+                );
+
+
+            if (memberBook) {
+
+                memberBook.addEventListener(
+                    "click",
+                    () => {
+
+                        const bookButton =
+                            document.getElementById(
+                                "bookBtn"
+                            );
+
+
+                        if (bookButton) {
+
+                            bookButton.click();
+
+                        }
+                        else {
+
+                            console.warn(
+                                "bookBtn not found"
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+
+
+            // ===============================
+            // STAMP ANIMATION
+            // ===============================
+
+            const stampItems =
+                result.querySelectorAll(
+                    ".stamp"
+                );
+
+
+            stampItems.forEach(
+                (stamp, index) => {
+
+                    setTimeout(() => {
+
+                        stamp.classList.add(
+                            "show"
+                        );
+
+                    }, index * 80);
+
+                }
+            );
+
+
+            console.log(
+                "Member Data:",
+                data
+            );
+
+
+        }
+        catch (error) {
+
+            console.error(
+                "Member API Error:",
+                error
+            );
+
+
+            result.innerHTML = `
+
+                <div class="member-error">
+
+                    <div class="error-icon">
+
+                        <i class="fas fa-exclamation-triangle"></i>
+
+                    </div>
+
+
+                    <h3>
+
+                        Connection Error
+
+                    </h3>
+
+
+                    <p>
+
+                        Unable to check your
+                        membership information.
+
+                        <br>
+
+                        Please check your internet
+                        connection and try again.
+
+                    </p>
+
+                </div>
+
+            `;
+
+        }
 
     });
 
 }
 
-const currentStamp = member.totalStamp % member.maxStamp;
-
-const displayStamp = currentStamp === 0 && member.totalStamp > 0
-    ? member.maxStamp
-    : currentStamp;
-
-const percent = (displayStamp / member.maxStamp) * 100;
-
-const rewardCount = Math.floor(member.totalStamp / member.maxStamp);
-
-let stars = "";
-
-for(let i = 1; i <= member.maxStamp; i++){
-
-    if(i <= displayStamp){
-
-        stars += `<div class="stamp active"></div>`;
-
-    }else{
-
-        stars += `<div class="stamp"></div>`;
-
-    }
-
-}
-
-result.innerHTML=`
-
-<div class="member-profile">
-
-    <div class="member-top">
-
-        <div>
-
-            <span class="member-badge">
-
-                Loyalty Member
-
-            </span>
-
-            <h3>
-
-                ${member.name}
-
-            </h3>
-
-            <p class="member-code">
-
-                ${member.code}
-
-            </p>
-
-        </div>
-
-        <div class="member-icon">
-
-    <img
-        src="images/logo/logo.png"
-        alt="Treehouse Massage">
-
-</div>
-
-    </div>
-
-    
-
-    <div class="member-section">
-
-    <h4>
-
-        Available Stamp
-
-    </h4>
-
-    <div class="stamp-list">
-
-        ${stars}
-
-    </div>
-
-    <div class="stamp-summary">
-
-        <strong>
-
-            ${member.totalStamp}
-
-        </strong>
-
-        <small>
-
-            Total Stamps
-
-        </small>
-
-    </div>
-
-    <div class="reward-grid">
-
-        <div class="reward-box">
-
-            <span>
-
-                🎯 Next Reward
-
-            </span>
-
-            <strong>
-
-                ${displayStamp} / ${member.maxStamp}
-
-            </strong>
-
-        </div>
-
-        <div class="reward-box">
-
-            <span>
-
-                🎁 Rewards Earned
-
-            </span>
-
-            <strong>
-
-                ${rewardCount}
-
-            </strong>
-
-        </div>
-
-    </div>
-
-</div>
-
-    <div class="member-detail">
-
-    <div class="detail-card">
-
-        <div class="detail-icon">
-
-            <i class="far fa-calendar-check"></i>
-
-        </div>
-
-        <div>
-
-            <small>
-
-                Last Visit
-
-            </small>
-
-            <strong>
-
-                ${member.lastVisit}
-
-            </strong>
-
-        </div>
-
-    </div>
-
-    <div class="detail-card">
-
-        <div class="detail-icon">
-
-            <i class="fas fa-seedling"></i>
-
-        </div>
-
-        <div>
-
-            <small>
-
-                Last Stamp
-
-            </small>
-
-            <strong>
-
-                ${member.lastPayment} Stamp
-
-            </strong>
-
-        </div>
-
-    </div>
-
-</div>
-
-    <button
-    type="button"
-    class="btn member-book-btn"
-    id="memberBook">
-
-    <i class="fab fa-whatsapp"></i>
-
-    Book Your Next Massage
-
-    </button>
-</div>
-
-`;
-
-
-
-const stampItems = result.querySelectorAll(".stamp");
-
-stampItems.forEach((stamp,index)=>{
-
-
-    console.log(data);
-
-
-});
-
-
-
-    setTimeout(()=>{
-
-        stamp.classList.add("show");
-
-    },index*80);
-
-});
-});
-
-}
 
 // ===============================
 // LOADING SCREEN
 // ===============================
 
-window.addEventListener("load",()=>{
+window.addEventListener(
+    "load",
+    () => {
 
-const loader=document.querySelector(".loader");
+        const loader =
+            document.querySelector(
+                ".loader"
+            );
 
-if(loader){
 
-loader.classList.add("hide");
+        if (loader) {
 
-setTimeout(()=>{
+            loader.classList.add(
+                "hide"
+            );
 
-loader.remove();
 
-},500);
+            setTimeout(() => {
 
-}
+                loader.remove();
 
-});
+            }, 500);
+
+        }
+
+    }
+);
+
+
 
 // ===============================
 // CURRENT YEAR

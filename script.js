@@ -477,38 +477,24 @@ if (checkButton) {
 
 
             // ===============================
-            // STAMP HTML
-            // ===============================
+// STAMP HTML
+// ===============================
 
-            let stars = "";
+let stars = "";
 
+for (
+    let i = 1;
+    i <= member.totalStamp;
+    i++
+) {
 
-            for (
-                let i = 1;
-                i <= member.maxStamp;
-                i++
-            ) {
+    stars += `
 
-                if (i <= displayStamp) {
+        <div class="stamp active"></div>
 
-                    stars += `
+    `;
 
-                        <div class="stamp active"></div>
-
-                    `;
-
-                }
-                else {
-
-                    stars += `
-
-                        <div class="stamp"></div>
-
-                    `;
-
-                }
-
-            }
+}
 
 
             // ===============================

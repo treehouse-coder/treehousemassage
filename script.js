@@ -711,33 +711,16 @@ for (
 
             if (memberBook) {
 
-                memberBook.addEventListener(
-                    "click",
-                    () => {
+    memberBook.addEventListener(
+        "click",
+        (e) => {
+            e.preventDefault();
 
-                        const bookButton =
-                            document.getElementById(
-                                "bookBtn"
-                            );
+            openWhatsApp();
+        }
+    );
 
-
-                        if (bookButton) {
-
-                            bookButton.click();
-
-                        }
-                        else {
-
-                            console.warn(
-                                "bookBtn not found"
-                            );
-
-                        }
-
-                    }
-                );
-
-            }
+}
 
 
             // ===============================
@@ -869,91 +852,51 @@ year.textContent=new Date().getFullYear();
 
 
 
-document.addEventListener("DOMContentLoaded", function () {
 
-    const bookButtons = document.querySelectorAll(".open-book");
-    const bookMenu = document.getElementById("bookMenu");
-    const waFloat = document.getElementById("waFloat");
+// ===============================
+// DIRECT WHATSAPP BOOKING
+// ===============================
 
-    if (bookButtons.length === 0 || !bookMenu) {
-    console.error("Book dropdown element tidak ditemukan");
-    return;
-    }
+const WHATSAPP_NUMBER = "6285281832203";
 
-    bookButtons.forEach(function(bookBtn){
+function openWhatsApp() {
 
-    bookBtn.addEventListener("click", function(e){
+    const message = encodeURIComponent(
+        "Hello Treehouse Massage, I would like to make a reservation."
+    );
 
-    e.stopPropagation();
+    const url =
+        `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
 
-    const rect = bookBtn.getBoundingClientRect();
+    window.open(url, "_blank");
 
-    // ======================================
-    // BOOK BUTTON DI LOYALTY SECTION
-    // ======================================
+}
 
-    if(bookBtn.classList.contains("member-book-btn")){
+// All booking buttons
+document.querySelectorAll(".open-book").forEach(button => {
 
-        bookMenu.style.left =
-            rect.left + (rect.width - bookMenu.offsetWidth) / 2 + "px";
+    button.addEventListener("click", function(e) {
 
-        bookMenu.style.top =
-            (rect.top - bookMenu.offsetHeight - 10) + "px";
+        e.preventDefault();
+        openWhatsApp();
 
-    }
-
-    // ======================================
-    // MOBILE HEADER
-    // ======================================
-
-    else if(window.innerWidth <= 600){
-
-        bookMenu.style.left =
-            (window.innerWidth - bookMenu.offsetWidth) / 2 + "px";
-
-        bookMenu.style.top =
-            (rect.top - bookMenu.offsetHeight - 12) + "px";
-
-    }
-
-    // ======================================
-    // DESKTOP HEADER
-    // ======================================
-
-    else{
-
-        bookMenu.style.left = rect.left + "px";
-        bookMenu.style.top = (rect.bottom + 10) + "px";
-
-    }
-
-    bookMenu.classList.toggle("show");
-
-});
-
-});
-
-    waFloat.addEventListener("click", function(e){
-
-    e.stopPropagation();
-
-    const rect = waFloat.getBoundingClientRect();
-
-    bookMenu.style.left = (rect.right - 200) + "px";
-    bookMenu.style.top = (rect.top - bookMenu.offsetHeight - 10) + "px";
-
-    bookMenu.classList.toggle("show");
-
-});
-    document.addEventListener("click", function () {
-        bookMenu.classList.remove("show");
-    });
-
-    bookMenu.addEventListener("click", function (e) {
-        e.stopPropagation();
     });
 
 });
+
+// Floating WhatsApp button
+const waFloat = document.getElementById("waFloat");
+
+if (waFloat) {
+
+    waFloat.addEventListener("click", function() {
+
+        openWhatsApp();
+
+    });
+
+}
+
 
 /*======================================
 FAQ
